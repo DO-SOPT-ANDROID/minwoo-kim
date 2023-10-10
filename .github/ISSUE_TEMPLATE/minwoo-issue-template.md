@@ -1,7 +1,7 @@
 ---
 name: Minwoo issue template
 about: Issues for assignments
-title: "[0주차 세미나] :"
+title: "[FEAT] Week0 00과제"
 labels: ''
 assignees: DoReMinWoo
 
