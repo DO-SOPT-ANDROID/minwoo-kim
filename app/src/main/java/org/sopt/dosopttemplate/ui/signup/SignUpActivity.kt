@@ -1,9 +1,10 @@
-package org.sopt.dosopttemplate
+package org.sopt.dosopttemplate.ui.signup
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
+import org.sopt.dosopttemplate.util.context.shortSnackBar
+import org.sopt.dosopttemplate.util.context.shortToast
 
 class SignUpActivity : AppCompatActivity() {
     lateinit var binding: ActivitySignUpBinding
@@ -14,17 +15,23 @@ class SignUpActivity : AppCompatActivity() {
         binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        signUpBtnListener()
+    }
+
+    private fun signUpBtnListener() {
         binding.run {
             btnSignUpToSignUp.setOnClickListener {
-                if(etSignUpId.text.toString() == ""
+                if (etSignUpId.text.toString() == ""
                     || etSignUpPw.text.toString() == ""
                     || etSignNickName.text.toString() == ""
-                    || etSignAddress.text.toString() == "") {
-                    Snackbar.make(binding.root, "정보를 입력해주세요.", Snackbar.LENGTH_SHORT).show()
-                } else if(etSignUpId.length() in 6..10
+                    || etSignAddress.text.toString() == ""
+                ) {
+                    shortSnackBar(binding.root, "정보를 입력해주세요.")
+                } else if (etSignUpId.length() in 6..10
                     && etSignUpPw.length() in 8..12
                     && etSignNickName.text.toString() != ""
-                    && etSignAddress.text.toString() != "") {
+                    && etSignAddress.text.toString() != ""
+                ) {
                     intent.putExtra("Id", etSignUpId.text.toString())
                     intent.putExtra("Pw", etSignUpPw.text.toString())
                     intent.putExtra("NickName", etSignNickName.text.toString())
@@ -34,9 +41,9 @@ class SignUpActivity : AppCompatActivity() {
 
                     finish()
 
-                    Snackbar.make(binding.root, "회원가입이 완료되었습니다.", Snackbar.LENGTH_SHORT).show()
+                    shortToast("회원가입이 완료되었습니다.")
                 } else {
-                    Snackbar.make(binding.root, "입력 조건을 확인해주세요.", Snackbar.LENGTH_SHORT).show()
+                    shortSnackBar(binding.root, "입력 조건을 확인해주세요.")
                 }
             }
         }

@@ -1,7 +1,7 @@
-package org.sopt.dosopttemplate
+package org.sopt.dosopttemplate.ui.main
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,14 +13,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val (id, nickName, address) = getUserData()
+        initText(id, nickName, address)
+    }
+
+    private fun getUserData(): Triple<String?, String?, String?> {
         val id = intent.getStringExtra("Id")
-        val pw = intent.getStringExtra("Pw")
         val nickName = intent.getStringExtra("NickName")
         val address = intent.getStringExtra("Address")
+        return Triple(id, nickName, address)
+    }
 
+    private fun initText(id: String?, nickName: String?, address: String?) {
         binding.run {
-            tvMainNickName.text = nickName
             tvMainId.text = id
+            tvMainNickName.text = nickName
             tvMainAddress.text = address
         }
     }
