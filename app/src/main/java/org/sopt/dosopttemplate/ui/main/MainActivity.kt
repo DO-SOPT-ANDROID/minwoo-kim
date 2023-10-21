@@ -1,34 +1,32 @@
 package org.sopt.dosopttemplate.ui.main
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import org.sopt.dosopttemplate.databinding.ActivityMainBinding
+import org.sopt.dosopttemplate.model.data.User
+import org.sopt.dosopttemplate.util.base.BindingActivity
+import org.sopt.dosopttemplate.util.inent.getParcelable
 
-class MainActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
+class MainActivity : BindingActivity<ActivityMainBinding>({ ActivityMainBinding.inflate(it) }) {
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val (id, nickName, address) = getUserData()
-        initText(id, nickName, address)
+        getUserData()
+        initText()
     }
 
-    private fun getUserData(): Triple<String?, String?, String?> {
-        val id = intent.getStringExtra("Id")
-        val nickName = intent.getStringExtra("NickName")
-        val address = intent.getStringExtra("Address")
-        return Triple(id, nickName, address)
+    private fun getUserData() {
+        user = intent.getParcelable("User", User::class.java)!!
     }
 
-    private fun initText(id: String?, nickName: String?, address: String?) {
+    private fun initText() {
         binding.run {
-            tvMainId.text = id
-            tvMainNickName.text = nickName
-            tvMainAddress.text = address
+            tvMainId.text = user.id
+            tvMainNickName.text = user.nickName
+            tvMainAddress.text = user.address
         }
     }
 }
