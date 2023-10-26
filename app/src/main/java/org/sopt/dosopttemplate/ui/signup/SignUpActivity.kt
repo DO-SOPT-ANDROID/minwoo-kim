@@ -16,6 +16,10 @@ class SignUpActivity :
 
         setContentView(binding.root)
 
+        binding.root.setOnClickListener {
+            hideKeyBoard()
+        }
+
         signUpBtnListener()
     }
 

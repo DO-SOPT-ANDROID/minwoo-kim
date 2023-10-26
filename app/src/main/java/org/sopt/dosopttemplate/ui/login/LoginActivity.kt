@@ -23,6 +23,10 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
 
         setContentView(binding.root)
 
+        binding.root.setOnClickListener {
+            hideKeyBoard()
+        }
+
         setSignUpActivityLauncher()
         initLoginBtnListener()
         initSignUpBtnListener()
