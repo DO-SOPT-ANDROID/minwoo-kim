@@ -20,17 +20,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        friendAdapter = FriendAdapter(requireContext())
-        binding.rvHome.adapter = friendAdapter
-
-        friendAdapter.setFriendList(DummyFriendsData.friendList)
+        initAdapter()
+        setFriendData()
     }
 
     private fun initAdapter() {
-
+        friendAdapter = FriendAdapter(requireContext())
+        binding.rvHome.adapter = friendAdapter
     }
 
     private fun setFriendData() {
-
+        friendAdapter.setFriendList(DummyFriendsData.friendList)
     }
 }
