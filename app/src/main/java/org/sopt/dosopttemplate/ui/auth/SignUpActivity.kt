@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.ui.signup
+package org.sopt.dosopttemplate.ui.auth
 
 import android.os.Bundle
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding

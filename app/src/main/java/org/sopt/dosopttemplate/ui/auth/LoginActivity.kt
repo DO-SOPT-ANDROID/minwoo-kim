@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.ui.login
+package org.sopt.dosopttemplate.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,8 +6,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
 import org.sopt.dosopttemplate.model.data.User
-import org.sopt.dosopttemplate.ui.main.MainActivity
-import org.sopt.dosopttemplate.ui.signup.SignUpActivity
+import org.sopt.dosopttemplate.ui.home.HomeActivity
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast
@@ -45,7 +44,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
         binding.btnLoginSubmit.setOnClickListener {
             if (::user.isInitialized) {
                 if (binding.etLoginId.text.toString() == user.id && binding.etLoginPw.text.toString() == user.pw) {
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
+                    val intent = Intent(this@LoginActivity, HomeActivity::class.java)
 
                     intent.putExtra("User", user)
 
