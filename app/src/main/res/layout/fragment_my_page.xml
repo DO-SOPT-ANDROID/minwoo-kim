@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
+    tools:context=".ui.mypage.MyPageFragment">
 
     <ImageView
-        android:id="@+id/imgMain"
+        android:id="@+id/ivMainProfile"
         android:layout_width="0dp"
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
@@ -25,9 +25,9 @@
         android:text="TextView"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/imgMain"
-        app:layout_constraintStart_toEndOf="@id/imgMain"
-        app:layout_constraintTop_toTopOf="@id/imgMain" />
+        app:layout_constraintBottom_toBottomOf="@id/ivMainProfile"
+        app:layout_constraintStart_toEndOf="@id/ivMainProfile"
+        app:layout_constraintTop_toTopOf="@id/ivMainProfile" />
 
     <TextView
         android:id="@+id/tvMainInfo"
@@ -38,10 +38,10 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:text="안녕하세요 Do Sopt 33기 안드로이드 파트 YB 김민우 입니다."
-        app:layout_constraintBottom_toBottomOf="@id/imgMain"
+        app:layout_constraintBottom_toBottomOf="@id/ivMainProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tvMainNickName"
-        app:layout_constraintTop_toTopOf="@id/imgMain" />
+        app:layout_constraintTop_toTopOf="@id/ivMainProfile" />
 
     <TextView
         android:id="@+id/tvMainIdTitle"
@@ -53,7 +53,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imgMain" />
+        app:layout_constraintTop_toBottomOf="@id/ivMainProfile" />
 
     <TextView
         android:id="@+id/tvMainId"
@@ -86,5 +86,4 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvMainAddressTitle" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
