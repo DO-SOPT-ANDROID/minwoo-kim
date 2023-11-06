@@ -4,14 +4,14 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityHomeBinding
-import org.sopt.dosopttemplate.model.data.User
+import org.sopt.dosopttemplate.model.data.UserInfo
 import org.sopt.dosopttemplate.ui.doandroid.DoAndroidFragment
 import org.sopt.dosopttemplate.ui.mypage.MyPageFragment
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.inent.getParcelable
 
 class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.inflate(it) }) {
-    private lateinit var user: User
+    private lateinit var UserInfo: UserInfo
 
     companion object {
         const val DO_ANDROID = "DoAndroid"
@@ -24,7 +24,7 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
 
         setContentView(binding.root)
         initBnv()
-        getUserData()
+        getUserInfo()
         clickBnv()
     }
 
@@ -54,7 +54,7 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
 
                 R.id.menu_mypage -> {
                     val bundle = Bundle().apply {
-                        putParcelable("UserInfo", user)
+                        putParcelable("UserInfo", UserInfo)
                     }
                     replaceFragment(MY_PAGE, bundle)
                     true
@@ -80,7 +80,7 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
         fragmentTransaction.commit()
     }
 
-    private fun getUserData() {
-        user = intent.getParcelable("User", User::class.java)!!
+    private fun getUserInfo() {
+        UserInfo = intent.getParcelable("UserInfo", UserInfo::class.java)!!
     }
 }
