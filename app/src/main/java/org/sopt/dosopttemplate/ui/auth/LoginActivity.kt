@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
-import org.sopt.dosopttemplate.model.data.User
+import org.sopt.dosopttemplate.model.data.UserInfo
 import org.sopt.dosopttemplate.ui.home.HomeActivity
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
@@ -15,7 +15,7 @@ import org.sopt.dosopttemplate.util.inent.getParcelable
 class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBinding.inflate(it) }) {
     private lateinit var signUpLauncher: ActivityResultLauncher<Intent>
 
-    lateinit var user: User
+    lateinit var UserInfo: UserInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,18 +35,18 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
         signUpLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
-                    user = result.data?.getParcelable("User", User::class.java)!!
+                    UserInfo = result.data?.getParcelable("UserInfo", UserInfo::class.java)!!
                 }
             }
     }
 
     private fun initLoginBtnListener() {
         binding.btnLoginSubmit.setOnClickListener {
-            if (::user.isInitialized) {
-                if (binding.etLoginId.text.toString() == user.id && binding.etLoginPw.text.toString() == user.pw) {
+            if (::UserInfo.isInitialized) {
+                if (binding.etLoginId.text.toString() == UserInfo.id && binding.etLoginPw.text.toString() == UserInfo.pw) {
                     val intent = Intent(this@LoginActivity, HomeActivity::class.java)
 
-                    intent.putExtra("User", user)
+                    intent.putExtra("UserInfo", UserInfo)
 
                     startActivity(intent)
 
