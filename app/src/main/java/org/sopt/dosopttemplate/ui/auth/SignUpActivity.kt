@@ -9,7 +9,7 @@ import org.sopt.dosopttemplate.util.context.shortToast
 
 class SignUpActivity :
     BindingActivity<ActivitySignUpBinding>({ ActivitySignUpBinding.inflate(it) }) {
-    lateinit var UserInfo: UserInfo
+    lateinit var userInfo: UserInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +37,11 @@ class SignUpActivity :
                     && etSignNickName.text.isNotEmpty()
                     && etSignAddress.text.isNotEmpty()
                 ) {
-                    UserInfo = UserInfo(
+                    userInfo = UserInfo(
                         etSignUpId.text.toString(), etSignUpPw.text.toString(),
                         etSignNickName.text.toString(), etSignAddress.text.toString()
                     )
-                    intent.putExtra("UserInfo", UserInfo)
+                    intent.putExtra("UserInfo", userInfo)
 
                     setResult(RESULT_OK, intent)
 

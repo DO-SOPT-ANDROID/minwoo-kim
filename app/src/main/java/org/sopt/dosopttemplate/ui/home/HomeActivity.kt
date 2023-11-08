@@ -1,17 +1,17 @@
 package org.sopt.dosopttemplate.ui.home
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityHomeBinding
-import org.sopt.dosopttemplate.model.data.UserInfo
 import org.sopt.dosopttemplate.ui.doandroid.DoAndroidFragment
 import org.sopt.dosopttemplate.ui.mypage.MyPageFragment
 import org.sopt.dosopttemplate.util.base.BindingActivity
-import org.sopt.dosopttemplate.util.inent.getParcelable
+import org.sopt.dosopttemplate.util.context.shortSnackBar
 
 class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.inflate(it) }) {
-    private lateinit var UserInfo: UserInfo
+    private var backPressedTime: Long = 0
 
     companion object {
         const val DO_ANDROID = "DoAndroid"
@@ -24,8 +24,8 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
 
         setContentView(binding.root)
         initBnv()
-        getUserInfo()
         clickBnv()
+        initOnBackPressed()
     }
 
     private fun initBnv() {
@@ -53,10 +53,7 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
                 }
 
                 R.id.menu_mypage -> {
-                    val bundle = Bundle().apply {
-                        putParcelable("UserInfo", UserInfo)
-                    }
-                    replaceFragment(MY_PAGE, bundle)
+                    replaceFragment(MY_PAGE, null)
                     true
                 }
 
@@ -65,7 +62,7 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
         }
     }
 
-    fun replaceFragment(name: String, bundle: Bundle?) {
+    private fun replaceFragment(name: String, bundle: Bundle?) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
         val newFragment = when (name) {
@@ -80,7 +77,18 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
         fragmentTransaction.commit()
     }
 
-    private fun getUserInfo() {
-        UserInfo = intent.getParcelable("UserInfo", UserInfo::class.java)!!
+    private fun initOnBackPressed() {
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (System.currentTimeMillis() - backPressedTime >= 2000) {
+                    backPressedTime = System.currentTimeMillis()
+
+                    shortSnackBar(binding.root, "한번 더 누르면 앱이 종료 됩니다.")
+                } else {
+                    finish()
+                }
+            }
+        }
+        this.onBackPressedDispatcher.addCallback(this, callback)
     }
 }
