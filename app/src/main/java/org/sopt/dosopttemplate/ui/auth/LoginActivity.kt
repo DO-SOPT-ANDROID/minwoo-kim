@@ -53,7 +53,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
     private fun initLoginBtnListener() {
         binding.btnLoginSubmit.setOnClickListener {
             if (::userInfo.isInitialized) {
-                if (binding.etLoginId.text.toString() == userInfo.id && binding.etLoginPw.text.toString() == userInfo.pw) {
+                if (binding.tilLoginId.editText?.text.toString() == userInfo.id && binding.tilLoginPw.editText?.text.toString() == userInfo.pw) {
                     setUserSharedPreferences(userInfo)
                     startHomeActivity()
 
