@@ -2,14 +2,14 @@ package org.sopt.dosopttemplate.ui.auth
 
 import android.os.Bundle
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
-import org.sopt.dosopttemplate.model.data.User
+import org.sopt.dosopttemplate.model.data.UserInfo
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast
 
 class SignUpActivity :
     BindingActivity<ActivitySignUpBinding>({ ActivitySignUpBinding.inflate(it) }) {
-    lateinit var user: User
+    lateinit var userInfo: UserInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +37,11 @@ class SignUpActivity :
                     && etSignNickName.text.isNotEmpty()
                     && etSignAddress.text.isNotEmpty()
                 ) {
-                    user = User(
+                    userInfo = UserInfo(
                         etSignUpId.text.toString(), etSignUpPw.text.toString(),
                         etSignNickName.text.toString(), etSignAddress.text.toString()
                     )
-                    intent.putExtra("User", user)
+                    intent.putExtra("UserInfo", userInfo)
 
                     setResult(RESULT_OK, intent)
 
