@@ -2,7 +2,7 @@ package org.sopt.dosopttemplate.ui.auth
 
 import android.os.Bundle
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
-import org.sopt.dosopttemplate.model.data.UserInfo
+import org.sopt.dosopttemplate.repository.model.data.UserInfo
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast

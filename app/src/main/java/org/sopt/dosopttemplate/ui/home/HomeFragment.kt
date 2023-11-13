@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.adapter.FriendAdapter
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
-import org.sopt.dosopttemplate.model.data.DummyFriendsData
+import org.sopt.dosopttemplate.repository.model.data.DummyFriendsData
 import org.sopt.dosopttemplate.util.base.BindingFragment
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 

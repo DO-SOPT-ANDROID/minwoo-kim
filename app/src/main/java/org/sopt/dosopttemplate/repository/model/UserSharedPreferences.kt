@@ -1,7 +1,7 @@
-package org.sopt.dosopttemplate.model
+package org.sopt.dosopttemplate.repository.model
 
 import android.content.Context
-import org.sopt.dosopttemplate.model.data.UserInfo
+import org.sopt.dosopttemplate.repository.model.data.UserInfo
 
 object UserSharedPreferences {
     private const val USER_INFO: String = "UserInfo"
