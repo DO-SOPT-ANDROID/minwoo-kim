@@ -9,6 +9,6 @@ fun Context.shortToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
 
-fun Context.shortSnackBar(view: View, message: String) {
+fun shortSnackBar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
 }

@@ -36,23 +36,23 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
                 .commit()
         }
 
-        binding.bnvHome.menu.findItem(R.id.menu_home).isChecked = true
+        binding.bnvHome.menu.findItem(R.id.item_home).isChecked = true
     }
 
     private fun clickBnv() {
-        binding.bnvHome.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.menu_do_android -> {
+        binding.bnvHome.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.item_do_android -> {
                     replaceFragment(DO_ANDROID, null)
                     true
                 }
 
-                R.id.menu_home -> {
+                R.id.item_home -> {
                     replaceFragment(HOME_FRAGMENT, null)
                     true
                 }
 
-                R.id.menu_mypage -> {
+                R.id.item_mypage -> {
                     replaceFragment(MY_PAGE, null)
                     true
                 }
