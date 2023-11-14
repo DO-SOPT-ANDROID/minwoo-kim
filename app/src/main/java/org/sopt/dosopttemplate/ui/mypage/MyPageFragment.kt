@@ -8,8 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.sopt.dosopttemplate.databinding.FragmentMyPageBinding
-import org.sopt.dosopttemplate.model.UserSharedPreferences
-import org.sopt.dosopttemplate.model.data.UserInfo
+import org.sopt.dosopttemplate.ui.auth.UserSharedPreferences
+import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.ui.auth.LoginActivity
 import org.sopt.dosopttemplate.util.base.BindingFragment
 
