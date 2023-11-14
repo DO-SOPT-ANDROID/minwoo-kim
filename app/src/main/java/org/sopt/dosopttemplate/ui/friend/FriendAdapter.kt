@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.adapter
+package org.sopt.dosopttemplate.ui.friend
 
 import android.content.Context
 import android.view.LayoutInflater

@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.sopt.dosopttemplate.R
-import org.sopt.dosopttemplate.adapter.FriendAdapter
 import org.sopt.dosopttemplate.databinding.FragmentFriendBinding
 import org.sopt.dosopttemplate.model.data.DummyFriendsData
 import org.sopt.dosopttemplate.util.base.BindingFragment
