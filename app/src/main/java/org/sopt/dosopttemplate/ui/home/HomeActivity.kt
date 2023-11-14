@@ -5,6 +5,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityHomeBinding
+import org.sopt.dosopttemplate.ui.friend.FriendFragment
 import org.sopt.dosopttemplate.ui.doandroid.DoAndroidFragment
 import org.sopt.dosopttemplate.ui.mypage.MyPageFragment
 import org.sopt.dosopttemplate.util.base.BindingActivity
@@ -15,6 +16,7 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
 
     companion object {
         const val DO_ANDROID = "DoAndroid"
+        const val FRIEND = "Friend"
         const val HOME_FRAGMENT = "HomeFragment"
         const val MY_PAGE = "MyPage"
     }
@@ -43,17 +45,22 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
         binding.bnvHome.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.item_do_android -> {
-                    replaceFragment(DO_ANDROID, null)
+                    replaceFragment(DO_ANDROID)
+                    true
+                }
+
+                R.id.item_friend -> {
+                    replaceFragment(FRIEND)
                     true
                 }
 
                 R.id.item_home -> {
-                    replaceFragment(HOME_FRAGMENT, null)
+                    replaceFragment(HOME_FRAGMENT)
                     true
                 }
 
                 R.id.item_mypage -> {
-                    replaceFragment(MY_PAGE, null)
+                    replaceFragment(MY_PAGE)
                     true
                 }
 
@@ -62,17 +69,16 @@ class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.
         }
     }
 
-    private fun replaceFragment(name: String, bundle: Bundle?) {
+    private fun replaceFragment(name: String) {
         val fragmentTransaction = supportFragmentManager.beginTransaction()
 
         val newFragment = when (name) {
             DO_ANDROID -> DoAndroidFragment()
+            FRIEND -> FriendFragment()
             HOME_FRAGMENT -> HomeFragment()
             MY_PAGE -> MyPageFragment()
             else -> Fragment()
         }
-
-        newFragment.arguments = bundle
         fragmentTransaction.replace(R.id.fcv_home, newFragment)
         fragmentTransaction.commit()
     }

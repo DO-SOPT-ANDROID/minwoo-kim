@@ -2,7 +2,7 @@ package org.sopt.dosopttemplate.adapter
 
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.dosopttemplate.databinding.ItemFriendInfoBinding
-import org.sopt.dosopttemplate.repository.model.data.Friend
+import org.sopt.dosopttemplate.model.data.Friend
 
 class FriendInfoViewHolder(private val binding: ItemFriendInfoBinding) :
     RecyclerView.ViewHolder(binding.root) {

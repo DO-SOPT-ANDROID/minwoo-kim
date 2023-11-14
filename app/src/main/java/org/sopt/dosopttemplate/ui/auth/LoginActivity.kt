@@ -8,8 +8,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
-import org.sopt.dosopttemplate.repository.model.UserSharedPreferences
-import org.sopt.dosopttemplate.repository.model.data.UserInfo
+import org.sopt.dosopttemplate.model.UserSharedPreferences
+import org.sopt.dosopttemplate.model.data.UserInfo
 import org.sopt.dosopttemplate.ui.home.HomeActivity
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar

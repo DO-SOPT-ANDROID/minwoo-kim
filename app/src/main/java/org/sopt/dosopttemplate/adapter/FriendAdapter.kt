@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.sopt.dosopttemplate.databinding.ItemFriendBirthdayBinding
 import org.sopt.dosopttemplate.databinding.ItemFriendInfoBinding
 import org.sopt.dosopttemplate.databinding.ItemFriendMyBinding
-import org.sopt.dosopttemplate.repository.model.data.Friend
+import org.sopt.dosopttemplate.model.data.Friend
 
 class FriendAdapter(context: Context) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private val inflater by lazy { LayoutInflater.from(context) }
