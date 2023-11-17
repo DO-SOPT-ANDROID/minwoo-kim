@@ -59,23 +59,23 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
             val id = binding.tilLoginId.editText?.text.toString()
             val password = binding.tilLoginPw.editText?.text.toString()
 
-            ServicePool.authService.login(LoginReq(id, password))
+            ServicePool.authService.postLogin(LoginReq(id, password))
                 .enqueue(object : retrofit2.Callback<LoginRes> {
                     override fun onResponse(
                         call: Call<LoginRes>,
                         response: Response<LoginRes>,
                     ) {
                         if (response.isSuccessful) {
-                            val data: LoginRes = response.body()!!
+                            val data: LoginRes = response.body() ?: LoginRes(-1, "", "")
                             val userId = data.id
                             shortToast("로그인 성공! 유저 ID는 $userId 입니다")
 
-                            setUserSharedPreferences(userInfo)
+                            if(::userInfo.isInitialized) {
+                                setUserSharedPreferences(userInfo)
+                            }
 
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)
-                        } else {
-                            shortToast("에러가 발생했어요~")
                         }
                     }
 
@@ -94,7 +94,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
     }
 
     private fun setUserSharedPreferences(userInfo: UserInfo) {
-        if (userInfo.id?.isNotEmpty()!!) {
+        if (userInfo.id?.isNotEmpty() ?: return) {
             UserSharedPreferences.setUserInfo(this@LoginActivity, userInfo)
         }
     }

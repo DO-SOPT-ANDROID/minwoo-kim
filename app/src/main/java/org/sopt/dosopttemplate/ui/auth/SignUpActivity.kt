@@ -22,7 +22,6 @@ class SignUpActivity :
         initSignupBtn()
     }
 
-
     private fun initSignupBtn() {
         binding.run {
             btnSignUpToSignUp.setOnClickListener {
@@ -32,7 +31,7 @@ class SignUpActivity :
                 val address = etSignAddress.text.toString()
                 val userInfo = UserInfo(id, password, nickname, address)
 
-                ServicePool.authService.signup(SignupReq(id, password, nickname))
+                ServicePool.authService.postSignup(SignupReq(id, password, nickname))
                     .enqueue(object : retrofit2.Callback<Unit> {
                         override fun onResponse(
                             call: Call<Unit>,
