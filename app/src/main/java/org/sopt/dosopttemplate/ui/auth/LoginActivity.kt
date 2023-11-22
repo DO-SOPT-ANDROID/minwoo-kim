@@ -7,17 +7,21 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import org.sopt.dosopttemplate.data.local.UserInfo
+import org.sopt.dosopttemplate.data.remote.api.ServicePool
+import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.LoginReq
+import org.sopt.dosopttemplate.data.remote.model.dto.response.auth.LoginRes
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
-import org.sopt.dosopttemplate.model.UserSharedPreferences
-import org.sopt.dosopttemplate.model.data.UserInfo
 import org.sopt.dosopttemplate.ui.home.HomeActivity
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast
 import org.sopt.dosopttemplate.util.inent.getParcelable
+import retrofit2.Call
+import retrofit2.Response
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBinding.inflate(it) }) {
-    private lateinit var signUpLauncher: ActivityResultLauncher<Intent>
+    private lateinit var signupLauncher: ActivityResultLauncher<Intent>
 
     private var backPressedTime: Long = 0
     private lateinit var userInfo: UserInfo
@@ -30,7 +34,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
         hideKeyBoard()
         autoLogin()
         setSignUpActivityLauncher()
-        initLoginBtnListener()
+        initLoginBtn()
         initSignUpBtnListener()
         initOnBackPressed()
     }
@@ -42,7 +46,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
     }
 
     private fun setSignUpActivityLauncher() {
-        signUpLauncher =
+        signupLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == RESULT_OK) {
                     userInfo = result.data?.getParcelable("UserInfo", UserInfo::class.java)!!
@@ -50,28 +54,49 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
             }
     }
 
-    private fun initLoginBtnListener() {
+    private fun initLoginBtn() {
         binding.btnLoginSubmit.setOnClickListener {
-            if (::userInfo.isInitialized) {
-                if (binding.tilLoginId.editText?.text.toString() == userInfo.id && binding.tilLoginPw.editText?.text.toString() == userInfo.pw) {
-                    setUserSharedPreferences(userInfo)
-                    startHomeActivity()
+            val id = binding.tilLoginId.editText?.text.toString()
+            val password = binding.tilLoginPw.editText?.text.toString()
 
-                    shortToast("로그인 되었습니다.")
-                } else shortSnackBar(binding.root, "회원정보가 일치하지 않습니다.")
-            } else shortSnackBar(binding.root, "먼저 회원가입을 진행해주세요.")
+            ServicePool.authService.postLogin(LoginReq(id, password))
+                .enqueue(object : retrofit2.Callback<LoginRes> {
+                    override fun onResponse(
+                        call: Call<LoginRes>,
+                        response: Response<LoginRes>,
+                    ) {
+                        if (response.isSuccessful) {
+                            val data: LoginRes = response.body() ?: LoginRes(-1, "", "")
+                            val userId = data.id
+                            shortToast("로그인 성공! 유저 ID는 $userId 입니다")
+
+                            if(::userInfo.isInitialized) {
+                                setUserSharedPreferences(userInfo)
+                            }
+
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            startActivity(intent)
+                        }
+                    }
+
+                    override fun onFailure(call: Call<LoginRes>, t: Throwable) {
+                        shortToast("서버 에러 발생")
+                    }
+                })
         }
     }
 
     private fun initSignUpBtnListener() {
         binding.btnLoginToSignUp.setOnClickListener {
             val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
-            signUpLauncher.launch(intent)
+            signupLauncher.launch(intent)
         }
     }
 
     private fun setUserSharedPreferences(userInfo: UserInfo) {
-        UserSharedPreferences.setUserInfo(this@LoginActivity, userInfo)
+        if (userInfo.id?.isNotEmpty() ?: return) {
+            UserSharedPreferences.setUserInfo(this@LoginActivity, userInfo)
+        }
     }
 
     private fun startHomeActivity() {

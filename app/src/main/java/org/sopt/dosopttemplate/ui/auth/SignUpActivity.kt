@@ -1,15 +1,17 @@
 package org.sopt.dosopttemplate.ui.auth
 
 import android.os.Bundle
+import org.sopt.dosopttemplate.data.local.UserInfo
+import org.sopt.dosopttemplate.data.remote.api.ServicePool
+import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.SignupReq
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
-import org.sopt.dosopttemplate.model.data.UserInfo
 import org.sopt.dosopttemplate.util.base.BindingActivity
-import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast
+import retrofit2.Call
+import retrofit2.Response
 
 class SignUpActivity :
     BindingActivity<ActivitySignUpBinding>({ ActivitySignUpBinding.inflate(it) }) {
-    lateinit var userInfo: UserInfo
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,37 +19,36 @@ class SignUpActivity :
         setContentView(binding.root)
 
         hideKeyBoard()
-        signUpBtnListener()
+        initSignupBtn()
     }
 
-    private fun signUpBtnListener() {
+    private fun initSignupBtn() {
         binding.run {
             btnSignUpToSignUp.setOnClickListener {
-                if (etSignUpId.text.isEmpty()
-                    || etSignUpPw.text.isEmpty()
-                    || etSignNickName.text.isEmpty()
-                    || etSignAddress.text.isEmpty()
-                ) {
-                    shortSnackBar(binding.root, "정보를 입력해주세요.")
-                } else if (etSignUpId.length() in 6..10
-                    && etSignUpPw.length() in 8..12
-                    && etSignNickName.text.isNotEmpty()
-                    && etSignAddress.text.isNotEmpty()
-                ) {
-                    userInfo = UserInfo(
-                        etSignUpId.text.toString(), etSignUpPw.text.toString(),
-                        etSignNickName.text.toString(), etSignAddress.text.toString()
-                    )
-                    intent.putExtra("UserInfo", userInfo)
+                val id = etSignUpId.text.toString()
+                val password = etSignUpPw.text.toString()
+                val nickname = etSignNickName.text.toString()
+                val address = etSignAddress.text.toString()
+                val userInfo = UserInfo(id, password, nickname, address)
 
-                    setResult(RESULT_OK, intent)
+                ServicePool.authService.postSignup(SignupReq(id, password, nickname))
+                    .enqueue(object : retrofit2.Callback<Unit> {
+                        override fun onResponse(
+                            call: Call<Unit>,
+                            response: Response<Unit>,
+                        ) {
+                            if (response.isSuccessful) {
+                                shortToast("회원가입 성공")
+                                intent.putExtra("UserInfo", userInfo)
+                                setResult(RESULT_OK, intent)
+                                finish()
+                            }
+                        }
 
-                    finish()
-
-                    shortToast("회원가입이 완료되었습니다.")
-                } else {
-                    shortSnackBar(binding.root, "입력 조건을 확인해주세요.")
-                }
+                        override fun onFailure(call: Call<Unit>, t: Throwable) {
+                            shortToast("서버 에러 발생")
+                        }
+                    })
             }
         }
     }

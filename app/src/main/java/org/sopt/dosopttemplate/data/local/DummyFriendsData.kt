@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.model.data
+package org.sopt.dosopttemplate.data.local
 
 import org.sopt.dosopttemplate.R
 

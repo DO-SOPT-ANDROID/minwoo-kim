@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.sopt.dosopttemplate.R
-import org.sopt.dosopttemplate.adapter.FriendAdapter
+import org.sopt.dosopttemplate.data.remote.api.ServicePool
+import org.sopt.dosopttemplate.data.remote.model.dto.response.follower.FollowerRes
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
-import org.sopt.dosopttemplate.model.data.DummyFriendsData
 import org.sopt.dosopttemplate.util.base.BindingFragment
-import org.sopt.dosopttemplate.util.context.shortSnackBar
+import org.sopt.dosopttemplate.util.context.shortToast
+import retrofit2.Call
+import retrofit2.Response
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>() {
-    private lateinit var friendAdapter: FriendAdapter
-
+    private lateinit var followerAdapter: FollowerAdapter
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -23,34 +23,35 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
-        initMenuClickListener()
-        setFriendData()
+        setRecyclerView()
     }
 
-    private fun initMenuClickListener() {
-        binding.tbHome.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.item_search -> {
-                    shortSnackBar(binding.root, "검색 아이콘이 눌렀습니다.")
-                    true
+    private fun setRecyclerView() {
+        ServicePool.followerService.getFollowerList(2)
+            .enqueue(object : retrofit2.Callback<FollowerRes> {
+                override fun onResponse(
+                    call: Call<FollowerRes>,
+                    response: Response<FollowerRes>
+                ) {
+                    if (response.isSuccessful) {
+                        val data = response.body()?.data
+
+                        setFollowerList(data ?: return)
+                    }
                 }
 
-                R.id.item_setting -> {
-                    shortSnackBar(binding.root, "설정 아이콘이 눌렀습니다.")
-                    true
+                override fun onFailure(call: Call<FollowerRes>, t: Throwable) {
+                    requireContext().shortToast("서버 에러 발생")
                 }
-
-                else -> false
-            }
-        }
+            })
     }
 
     private fun initAdapter() {
-        friendAdapter = FriendAdapter(requireContext())
-        binding.rvHome.adapter = friendAdapter
+        followerAdapter = FollowerAdapter(requireContext())
+        binding.rvHome.adapter = followerAdapter
     }
 
-    private fun setFriendData() {
-        friendAdapter.setFriendList(DummyFriendsData.friendList)
+    fun setFollowerList(followerData: List<FollowerRes.FollowerData>) {
+        followerAdapter.setFollowerList(followerData)
     }
 }
