@@ -1,6 +1,6 @@
 package org.sopt.dosopttemplate.data.remote.service
 
-import org.sopt.dosopttemplate.data.remote.model.dto.response.follower.FollowerRes
+import org.sopt.dosopttemplate.data.remote.model.dto.response.follower.ResponseFollowerDto
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -9,5 +9,5 @@ interface FollowerService {
     @GET("api/users")
     fun getFollowerList(
         @Query("page") page: Int
-    ): Call<FollowerRes>
+    ): Call<ResponseFollowerDto>
 }

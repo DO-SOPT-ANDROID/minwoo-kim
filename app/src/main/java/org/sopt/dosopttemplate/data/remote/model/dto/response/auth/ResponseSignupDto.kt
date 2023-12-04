@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SignupRes(
+data class ResponseSignupDto(
     @SerialName("message")
     val msg: String,
 )

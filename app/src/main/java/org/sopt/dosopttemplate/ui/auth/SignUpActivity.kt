@@ -3,7 +3,7 @@ package org.sopt.dosopttemplate.ui.auth
 import android.os.Bundle
 import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
-import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.SignupReq
+import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestSignupDto
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortToast
@@ -31,7 +31,7 @@ class SignUpActivity :
                 val address = etSignAddress.text.toString()
                 val userInfo = UserInfo(id, password, nickname, address)
 
-                ServicePool.authService.postSignup(SignupReq(id, password, nickname))
+                ServicePool.authService.postSignup(RequestSignupDto(id, password, nickname))
                     .enqueue(object : retrofit2.Callback<Unit> {
                         override fun onResponse(
                             call: Call<Unit>,

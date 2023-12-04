@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
-import org.sopt.dosopttemplate.data.remote.model.dto.response.follower.FollowerRes
+import org.sopt.dosopttemplate.data.remote.model.dto.response.follower.ResponseFollowerDto
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
 import org.sopt.dosopttemplate.util.base.BindingFragment
 import org.sopt.dosopttemplate.util.context.shortToast
@@ -28,10 +28,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
 
     private fun setRecyclerView() {
         ServicePool.followerService.getFollowerList(2)
-            .enqueue(object : retrofit2.Callback<FollowerRes> {
+            .enqueue(object : retrofit2.Callback<ResponseFollowerDto> {
                 override fun onResponse(
-                    call: Call<FollowerRes>,
-                    response: Response<FollowerRes>
+                    call: Call<ResponseFollowerDto>,
+                    response: Response<ResponseFollowerDto>
                 ) {
                     if (response.isSuccessful) {
                         val data = response.body()?.data
@@ -40,7 +40,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
                     }
                 }
 
-                override fun onFailure(call: Call<FollowerRes>, t: Throwable) {
+                override fun onFailure(call: Call<ResponseFollowerDto>, t: Throwable) {
                     requireContext().shortToast("서버 에러 발생")
                 }
             })
@@ -51,7 +51,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         binding.rvHome.adapter = followerAdapter
     }
 
-    fun setFollowerList(followerData: List<FollowerRes.FollowerData>) {
+    fun setFollowerList(followerData: List<ResponseFollowerDto.FollowerData>) {
         followerAdapter.setFollowerList(followerData)
     }
 }
