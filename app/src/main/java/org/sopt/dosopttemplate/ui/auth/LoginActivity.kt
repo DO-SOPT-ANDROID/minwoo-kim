@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
 import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestLoginDto
@@ -22,6 +23,7 @@ import retrofit2.Response
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBinding.inflate(it) }) {
     private lateinit var signupLauncher: ActivityResultLauncher<Intent>
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     private var backPressedTime: Long = 0
     private lateinit var userInfo: UserInfo
@@ -30,6 +32,9 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+
+        binding.lifecycleOwner = this
+        binding.loginViewModel = loginViewModel
 
         hideKeyBoard()
         autoLogin()
@@ -66,11 +71,12 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
                         response: Response<ResponseLoginDto>,
                     ) {
                         if (response.isSuccessful) {
-                            val data: ResponseLoginDto = response.body() ?: ResponseLoginDto(-1, "", "")
+                            val data: ResponseLoginDto =
+                                response.body() ?: ResponseLoginDto(-1, "", "")
                             val userId = data.id
                             shortToast("로그인 성공! 유저 ID는 $userId 입니다")
 
-                            if(::userInfo.isInitialized) {
+                            if (::userInfo.isInitialized) {
                                 setUserSharedPreferences(userInfo)
                             }
 
@@ -88,7 +94,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
 
     private fun initSignUpBtnListener() {
         binding.btnLoginToSignUp.setOnClickListener {
-            val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
+            val intent = Intent(this@LoginActivity, SignupActivity::class.java)
             signupLauncher.launch(intent)
         }
     }

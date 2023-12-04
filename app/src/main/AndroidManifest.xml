@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.auth.SignUpActivity"
+            android:name=".ui.auth.SignupActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
     </application>

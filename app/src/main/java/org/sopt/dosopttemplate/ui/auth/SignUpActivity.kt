@@ -1,6 +1,7 @@
 package org.sopt.dosopttemplate.ui.auth
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
 import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestSignupDto
@@ -10,13 +11,16 @@ import org.sopt.dosopttemplate.util.context.shortToast
 import retrofit2.Call
 import retrofit2.Response
 
-class SignUpActivity :
+class SignupActivity :
     BindingActivity<ActivitySignUpBinding>({ ActivitySignUpBinding.inflate(it) }) {
+    private val signupViewModel by viewModels<SignupViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(binding.root)
+
+        binding.lifecycleOwner = this
+        binding.signupViewModel = signupViewModel
 
         hideKeyBoard()
         initSignupBtn()
