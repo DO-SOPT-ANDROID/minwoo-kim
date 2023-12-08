@@ -14,7 +14,7 @@ data class ResponseFollowerDto(
     @SerialName("total_pages")
     val total_pages: Int,
     @SerialName("data")
-    val data: List<FollowerData>,
+    val followerData: List<FollowerData>,
     @SerialName("support")
     val support: Support,
 ) {
