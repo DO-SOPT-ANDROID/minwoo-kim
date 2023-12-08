@@ -1,11 +1,11 @@
 package org.sopt.dosopttemplate.ui.auth
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
-import org.sopt.dosopttemplate.data.local.UserInfo
+import org.sopt.dosopttemplate.data.local.SignupState
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
 import org.sopt.dosopttemplate.util.base.BindingActivity
+import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast
 
 class SignupActivity :
@@ -57,17 +57,18 @@ class SignupActivity :
             when (signupState) {
                 is SignupState.Success -> {
                     shortToast("회원가입 성공")
+
                     intent.putExtra("UserInfo", signupState.data)
                     setResult(RESULT_OK, intent)
                     finish()
                 }
 
                 is SignupState.Error -> {
-                    shortToast("회원가입 실패 : ${signupState.message}")
+                    shortSnackBar(binding.root, "회원가입 실패")
                 }
 
                 is SignupState.Loading -> {
-                    shortToast("회원가입 중")
+                    shortSnackBar(binding.root, "회원가입 중")
                 }
             }
         }
