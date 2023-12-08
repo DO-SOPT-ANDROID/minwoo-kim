@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import org.sopt.dosopttemplate.data.local.SignupState
 import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
 import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestSignupDto
@@ -42,15 +43,16 @@ class SignupViewModel : ViewModel() {
                     )
                 )
             }.onSuccess {
-                val userInfo = UserInfo(
-                    id.value.orEmpty(),
-                    pw.value.orEmpty(),
-                    nickname.value.orEmpty(),
-                    address.value.orEmpty()
+                _signupState.value = SignupState.Success(
+                    UserInfo(
+                        id.value,
+                        pw.value,
+                        nickname.value,
+                        address.value
+                    )
                 )
-                _signupState.value = SignupState.Success(userInfo)
             }.onFailure {
-                _signupState.value = SignupState.Error(it.message!!)
+                _signupState.value = SignupState.Error
             }
         }
     }
@@ -63,10 +65,4 @@ class SignupViewModel : ViewModel() {
         val ID_PATTERN: Pattern = Pattern.compile(ID_REGEX)
         val PW_PATTERN: Pattern = Pattern.compile(PW_REGEX)
     }
-}
-
-sealed class SignupState {
-    data class Success(val data: UserInfo) : SignupState()
-    data class Error(val message: String) : SignupState()
-    object Loading : SignupState()
 }
