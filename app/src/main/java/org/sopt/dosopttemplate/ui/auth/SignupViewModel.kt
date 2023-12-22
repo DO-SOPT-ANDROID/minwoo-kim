@@ -27,7 +27,7 @@ class SignupViewModel : ViewModel() {
 
     val isPwValid = pw.map { PW_PATTERN.matcher(it).matches() }
 
-    fun signupBtnEnabled() {
+    fun signupBtnValidate() {
         _isSignupBtn.value = (isIdValid.value == true && isPwValid.value == true)
     }
 

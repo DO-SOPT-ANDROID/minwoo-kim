@@ -47,6 +47,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
             when (homeState) {
                 is HomeState.Success -> {
                     setFollowerList()
+                    shortSnackBar(binding.root, "데이터 불러오기 성공")
                 }
 
                 is HomeState.Error -> {

@@ -39,7 +39,7 @@ class SignupActivity :
             } else {
                 binding.tilSignupId.isErrorEnabled = false
             }
-            viewModel.signupBtnEnabled()
+            viewModel.signupBtnValidate()
         }
         viewModel.isPwValid.observe(this) { isPwValid ->
             if (!isPwValid && !viewModel.pw.value.isNullOrBlank()) {
@@ -48,7 +48,7 @@ class SignupActivity :
             } else {
                 binding.tilSignupPw.isErrorEnabled = false
             }
-            viewModel.signupBtnEnabled()
+            viewModel.signupBtnValidate()
         }
     }
 
