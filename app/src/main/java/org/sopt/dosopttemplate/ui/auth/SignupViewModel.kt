@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.dosopttemplate.data.local.SignupState
 import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
 import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestSignupDto
@@ -55,7 +53,7 @@ class SignupViewModel : ViewModel() {
                     )
                 )
             }.onFailure {
-                _signupState.value = UiState.Failure("서버통신에 실패했습니다.")
+                _signupState.value = UiState.Failure(it.message.orEmpty())
             }
         }
     }
