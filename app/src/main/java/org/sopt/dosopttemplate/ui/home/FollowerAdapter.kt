@@ -4,8 +4,6 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.data.remote.model.dto.response.follower.ResponseFollowerDto
 import org.sopt.dosopttemplate.databinding.ItemFollowerBinding
 
@@ -18,14 +16,7 @@ class FollowerAdapter(context: Context) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(followerData: ResponseFollowerDto.FollowerData) {
-            binding.run {
-                tvFollowerName.text = followerData.first_name
-                tvFollowerEmail.text = followerData.email
-                ivFollower.load(followerData.avatar) {
-                    placeholder(R.drawable.img_jjang_gu)
-                    error(R.drawable.img_jjang_gu)
-                }
-            }
+            binding.followerData = followerData
         }
     }
 

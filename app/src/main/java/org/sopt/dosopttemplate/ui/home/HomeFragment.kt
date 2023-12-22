@@ -4,16 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import org.sopt.dosopttemplate.data.remote.api.ServicePool
-import org.sopt.dosopttemplate.data.remote.model.dto.response.follower.ResponseFollowerDto
+import androidx.fragment.app.viewModels
+import org.sopt.dosopttemplate.data.local.HomeState
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
 import org.sopt.dosopttemplate.util.base.BindingFragment
-import org.sopt.dosopttemplate.util.context.shortToast
-import retrofit2.Call
-import retrofit2.Response
+import org.sopt.dosopttemplate.util.context.shortSnackBar
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     private lateinit var followerAdapter: FollowerAdapter
+    private val viewModel by viewModels<HomeViewModel>()
+
     override fun getFragmentBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -23,27 +23,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
-        setRecyclerView()
+        getFollowerList()
+        observeHomeState()
     }
 
-    private fun setRecyclerView() {
-        ServicePool.followerService.getFollowerList(2)
-            .enqueue(object : retrofit2.Callback<ResponseFollowerDto> {
-                override fun onResponse(
-                    call: Call<ResponseFollowerDto>,
-                    response: Response<ResponseFollowerDto>
-                ) {
-                    if (response.isSuccessful) {
-                        val data = response.body()?.data
-
-                        setFollowerList(data ?: return)
-                    }
-                }
-
-                override fun onFailure(call: Call<ResponseFollowerDto>, t: Throwable) {
-                    requireContext().shortToast("서버 에러 발생")
-                }
-            })
+    private fun getFollowerList() {
+        viewModel.getFollowerList()
     }
 
     private fun initAdapter() {
@@ -51,7 +36,28 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         binding.rvHome.adapter = followerAdapter
     }
 
-    fun setFollowerList(followerData: List<ResponseFollowerDto.FollowerData>) {
-        followerAdapter.setFollowerList(followerData)
+    private fun setFollowerList() {
+        viewModel.followerList.observe(viewLifecycleOwner) { followerList ->
+            followerAdapter.setFollowerList(followerList)
+        }
+    }
+
+    fun observeHomeState() {
+        viewModel.homeState.observe(viewLifecycleOwner) { homeState ->
+            when (homeState) {
+                is HomeState.Success -> {
+                    setFollowerList()
+                    shortSnackBar(binding.root, "데이터 불러오기 성공")
+                }
+
+                is HomeState.Error -> {
+                    shortSnackBar(binding.root, "데이터 불러오기 실패")
+                }
+
+                is HomeState.Loading -> {
+                    shortSnackBar(binding.root, "데이터 불러오는 중")
+                }
+            }
+        }
     }
 }
