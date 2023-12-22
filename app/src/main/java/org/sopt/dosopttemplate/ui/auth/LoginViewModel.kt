@@ -29,7 +29,7 @@ class LoginViewModel : ViewModel() {
                 )
             }.onSuccess {
                 _loginState.value =
-                    UiState.Success(UserInfo(it.username, pw.value, it.nickname, it.id.toString()))
+                    UiState.Success(UserInfo(it.id.toString(), pw.value, it.nickname, it.username))
 
             }.onFailure {
                 _loginState.value = UiState.Failure(it.message.toString())
