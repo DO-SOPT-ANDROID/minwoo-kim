@@ -2,8 +2,13 @@ package org.sopt.dosopttemplate.ui.auth
 
 import android.os.Bundle
 import androidx.activity.viewModels
-import org.sopt.dosopttemplate.data.local.SignupState
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.databinding.ActivitySignUpBinding
+import org.sopt.dosopttemplate.util.UiState
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast
@@ -53,24 +58,28 @@ class SignupActivity :
     }
 
     private fun observeSignupState() {
-        viewModel.signupState.observe(this) { signupState ->
-            when (signupState) {
-                is SignupState.Success -> {
-                    shortToast("회원가입 성공")
+        lifecycleScope.launch {
+            viewModel.signupState.flowWithLifecycle(lifecycle).onEach { state ->
+                when (state) {
+                    is UiState.Success -> {
+                        shortToast("회원가입 성공")
 
-                    intent.putExtra("UserInfo", signupState.data)
-                    setResult(RESULT_OK, intent)
-                    finish()
-                }
+                        intent.putExtra("UserInfo", state.data)
+                        setResult(RESULT_OK, intent)
+                        finish()
+                    }
 
-                is SignupState.Error -> {
-                    shortSnackBar(binding.root, "회원가입 실패")
-                }
+                    is UiState.Failure -> {
+                        shortSnackBar(binding.root, "회원가입 실패")
+                    }
 
-                is SignupState.Loading -> {
-                    shortSnackBar(binding.root, "회원가입 중")
+                    is UiState.Loading -> {
+                        shortSnackBar(binding.root, "회원가입 중")
+                    }
+
+                    is UiState.Empty -> return@onEach
                 }
-            }
+            }.launchIn(lifecycleScope)
         }
     }
 }

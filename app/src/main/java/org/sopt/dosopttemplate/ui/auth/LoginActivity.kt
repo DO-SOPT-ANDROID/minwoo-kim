@@ -93,7 +93,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
     }
 
     private fun initSignUpBtnListener() {
-        binding.btnLoginToSignUp.setOnClickListener {
+        binding.btnLoginToSignup.setOnClickListener {
             val intent = Intent(this@LoginActivity, SignupActivity::class.java)
             signupLauncher.launch(intent)
         }
