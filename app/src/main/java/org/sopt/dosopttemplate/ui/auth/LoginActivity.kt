@@ -7,10 +7,11 @@ import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
-import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.LoginReq
-import org.sopt.dosopttemplate.data.remote.model.dto.response.auth.LoginRes
+import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestLoginDto
+import org.sopt.dosopttemplate.data.remote.model.dto.response.auth.ResponseLoginDto
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
 import org.sopt.dosopttemplate.ui.home.HomeActivity
 import org.sopt.dosopttemplate.util.base.BindingActivity
@@ -22,6 +23,7 @@ import retrofit2.Response
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBinding.inflate(it) }) {
     private lateinit var signupLauncher: ActivityResultLauncher<Intent>
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     private var backPressedTime: Long = 0
     private lateinit var userInfo: UserInfo
@@ -30,6 +32,9 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
         super.onCreate(savedInstanceState)
 
         setContentView(binding.root)
+
+        binding.lifecycleOwner = this
+        binding.loginViewModel = loginViewModel
 
         hideKeyBoard()
         autoLogin()
@@ -59,18 +64,19 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
             val id = binding.tilLoginId.editText?.text.toString()
             val password = binding.tilLoginPw.editText?.text.toString()
 
-            ServicePool.authService.postLogin(LoginReq(id, password))
-                .enqueue(object : retrofit2.Callback<LoginRes> {
+            ServicePool.authService.postLogin(RequestLoginDto(id, password))
+                .enqueue(object : retrofit2.Callback<ResponseLoginDto> {
                     override fun onResponse(
-                        call: Call<LoginRes>,
-                        response: Response<LoginRes>,
+                        call: Call<ResponseLoginDto>,
+                        response: Response<ResponseLoginDto>,
                     ) {
                         if (response.isSuccessful) {
-                            val data: LoginRes = response.body() ?: LoginRes(-1, "", "")
+                            val data: ResponseLoginDto =
+                                response.body() ?: ResponseLoginDto(-1, "", "")
                             val userId = data.id
                             shortToast("로그인 성공! 유저 ID는 $userId 입니다")
 
-                            if(::userInfo.isInitialized) {
+                            if (::userInfo.isInitialized) {
                                 setUserSharedPreferences(userInfo)
                             }
 
@@ -79,7 +85,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
                         }
                     }
 
-                    override fun onFailure(call: Call<LoginRes>, t: Throwable) {
+                    override fun onFailure(call: Call<ResponseLoginDto>, t: Throwable) {
                         shortToast("서버 에러 발생")
                     }
                 })
@@ -88,7 +94,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
 
     private fun initSignUpBtnListener() {
         binding.btnLoginToSignUp.setOnClickListener {
-            val intent = Intent(this@LoginActivity, SignUpActivity::class.java)
+            val intent = Intent(this@LoginActivity, SignupActivity::class.java)
             signupLauncher.launch(intent)
         }
     }
