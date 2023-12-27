@@ -4,16 +4,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.dosopttemplate.data.local.SignupState
 import org.sopt.dosopttemplate.data.local.UserInfo
 import org.sopt.dosopttemplate.data.remote.api.ServicePool
 import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestSignupDto
+import org.sopt.dosopttemplate.util.UiState
 import java.util.regex.Pattern
 
 class SignupViewModel : ViewModel() {
-    private val _signupState = MutableLiveData<SignupState>()
-    val signupState = _signupState
+    private val _signupState = MutableStateFlow<UiState<UserInfo>>(UiState.Empty)
+    val signupState = _signupState.asStateFlow()
 
     private var _isSignupBtn = MutableLiveData(false)
     val isSignupBtn = _isSignupBtn
@@ -32,7 +34,6 @@ class SignupViewModel : ViewModel() {
     }
 
     fun postSignup() {
-        _signupState.value = SignupState.Loading
         viewModelScope.launch {
             runCatching {
                 ServicePool.authService.postSignup(
@@ -43,7 +44,7 @@ class SignupViewModel : ViewModel() {
                     )
                 )
             }.onSuccess {
-                _signupState.value = SignupState.Success(
+                _signupState.value = UiState.Success(
                     UserInfo(
                         id.value,
                         pw.value,
@@ -52,7 +53,7 @@ class SignupViewModel : ViewModel() {
                     )
                 )
             }.onFailure {
-                _signupState.value = SignupState.Error
+                _signupState.value = UiState.Failure(it.message.orEmpty())
             }
         }
     }

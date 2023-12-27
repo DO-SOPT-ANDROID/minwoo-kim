@@ -8,18 +8,19 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.data.local.UserInfo
-import org.sopt.dosopttemplate.data.remote.api.ServicePool
-import org.sopt.dosopttemplate.data.remote.model.dto.request.auth.RequestLoginDto
-import org.sopt.dosopttemplate.data.remote.model.dto.response.auth.ResponseLoginDto
 import org.sopt.dosopttemplate.databinding.ActivityLoginBinding
 import org.sopt.dosopttemplate.ui.home.HomeActivity
+import org.sopt.dosopttemplate.util.UiState
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 import org.sopt.dosopttemplate.util.context.shortToast
 import org.sopt.dosopttemplate.util.inent.getParcelable
-import retrofit2.Call
-import retrofit2.Response
 
 class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBinding.inflate(it) }) {
     private lateinit var signupLauncher: ActivityResultLauncher<Intent>
@@ -39,7 +40,7 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
         hideKeyBoard()
         autoLogin()
         setSignUpActivityLauncher()
-        initLoginBtn()
+        observeLoginState()
         initSignUpBtnListener()
         initOnBackPressed()
     }
@@ -59,41 +60,38 @@ class LoginActivity : BindingActivity<ActivityLoginBinding>({ ActivityLoginBindi
             }
     }
 
-    private fun initLoginBtn() {
+    private fun observeLoginState() {
         binding.btnLoginSubmit.setOnClickListener {
-            val id = binding.tilLoginId.editText?.text.toString()
-            val password = binding.tilLoginPw.editText?.text.toString()
+            loginViewModel.clickLoginBtn()
 
-            ServicePool.authService.postLogin(RequestLoginDto(id, password))
-                .enqueue(object : retrofit2.Callback<ResponseLoginDto> {
-                    override fun onResponse(
-                        call: Call<ResponseLoginDto>,
-                        response: Response<ResponseLoginDto>,
-                    ) {
-                        if (response.isSuccessful) {
-                            val data: ResponseLoginDto =
-                                response.body() ?: ResponseLoginDto(-1, "", "")
-                            val userId = data.id
-                            shortToast("로그인 성공! 유저 ID는 $userId 입니다")
+            lifecycleScope.launch {
+                loginViewModel.loginState.flowWithLifecycle(lifecycle).onEach { state ->
+                    when (state) {
+                        is UiState.Success -> {
+                            shortToast("로그인 성공! 유저 ID는 ${state.data.id} 입니다.")
 
-                            if (::userInfo.isInitialized) {
-                                setUserSharedPreferences(userInfo)
-                            }
-
+                            setUserSharedPreferences(state.data)
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)
                         }
-                    }
 
-                    override fun onFailure(call: Call<ResponseLoginDto>, t: Throwable) {
-                        shortToast("서버 에러 발생")
+                        is UiState.Failure -> {
+                            shortSnackBar(binding.root, "로그인 실패, ${state.msg}")
+                        }
+
+                        is UiState.Loading -> {
+                            shortSnackBar(binding.root, "로그인 중")
+                        }
+
+                        is UiState.Empty -> return@onEach
                     }
-                })
+                }.launchIn(lifecycleScope)
+            }
         }
     }
 
     private fun initSignUpBtnListener() {
-        binding.btnLoginToSignUp.setOnClickListener {
+        binding.btnLoginToSignup.setOnClickListener {
             val intent = Intent(this@LoginActivity, SignupActivity::class.java)
             signupLauncher.launch(intent)
         }
