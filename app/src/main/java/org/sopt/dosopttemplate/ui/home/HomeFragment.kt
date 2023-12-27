@@ -7,12 +7,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import org.sopt.dosopttemplate.data.local.HomeState
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
+import org.sopt.dosopttemplate.ui.common.ViewModelFactory
 import org.sopt.dosopttemplate.util.base.BindingFragment
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     private lateinit var followerAdapter: FollowerAdapter
-    private val viewModel by viewModels<HomeViewModel>()
+    private val viewModel: HomeViewModel by viewModels { ViewModelFactory() }
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -42,7 +43,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         }
     }
 
-    fun observeHomeState() {
+    private fun observeHomeState() {
         viewModel.homeState.observe(viewLifecycleOwner) { homeState ->
             when (homeState) {
                 is HomeState.Success -> {
