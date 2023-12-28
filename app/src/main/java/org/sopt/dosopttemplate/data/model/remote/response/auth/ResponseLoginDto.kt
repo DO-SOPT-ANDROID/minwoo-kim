@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.data.model.remote.model.response.auth
+package org.sopt.dosopttemplate.data.model.remote.response.auth
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -3,10 +3,11 @@ package org.sopt.dosopttemplate.presentation.home
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.sopt.dosopttemplate.data.model.local.HomeState
-import org.sopt.dosopttemplate.data.model.remote.model.response.follower.ResponseFollowerDto
+import org.sopt.dosopttemplate.data.model.remote.response.follower.ResponseFollowerDto
 import org.sopt.dosopttemplate.data.repository.HomeRepositoryImpl
+import javax.inject.Inject
 
 class HomeViewModel(private val homeRepository: HomeRepositoryImpl) : ViewModel() {
     private val _homeState = MutableLiveData<HomeState>()

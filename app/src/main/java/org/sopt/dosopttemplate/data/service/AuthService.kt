@@ -1,8 +1,8 @@
 package org.sopt.dosopttemplate.data.service
 
-import org.sopt.dosopttemplate.data.model.remote.model.request.auth.RequestLoginDto
-import org.sopt.dosopttemplate.data.model.remote.model.request.auth.RequestSignupDto
-import org.sopt.dosopttemplate.data.model.remote.model.response.auth.ResponseLoginDto
+import org.sopt.dosopttemplate.data.model.remote.request.auth.RequestLoginDto
+import org.sopt.dosopttemplate.data.model.remote.request.auth.RequestSignupDto
+import org.sopt.dosopttemplate.data.model.remote.response.auth.ResponseLoginDto
 import retrofit2.http.Body
 import retrofit2.http.POST
 

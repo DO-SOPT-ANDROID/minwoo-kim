@@ -7,11 +7,10 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.sopt.dosopttemplate.BuildConfig
 import org.sopt.dosopttemplate.BuildConfig.AUTH_BASE_URL
 import org.sopt.dosopttemplate.BuildConfig.FOLLOWER_BASE_URL
 import org.sopt.dosopttemplate.data.service.AuthService
-import org.sopt.dosopttemplate.data.service.FollowerService
+import org.sopt.dosopttemplate.data.service.HomeService
 import retrofit2.Retrofit
 
 object ApiFactory {
@@ -40,5 +39,5 @@ object ApiFactory {
 
 object ServicePool {
     val authService = ApiFactory.create<AuthService, String>(AUTH_BASE_URL)
-    val followerService = ApiFactory.create<FollowerService, String>(FOLLOWER_BASE_URL)
+    val followerService = ApiFactory.create<HomeService, String>(FOLLOWER_BASE_URL)
 }

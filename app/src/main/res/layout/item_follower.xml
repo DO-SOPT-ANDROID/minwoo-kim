@@ -7,7 +7,7 @@
 
         <variable
             name="followerData"
-            type="org.sopt.dosopttemplate.data.model.remote.model.response.follower.ResponseFollowerDto" />
+            type="org.sopt.dosopttemplate.data.model.remote.response.follower.ResponseFollowerDto.FollowerData" />
 
     </data>
 
