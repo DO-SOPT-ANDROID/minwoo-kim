@@ -2,17 +2,18 @@ package org.sopt.dosopttemplate.data.model.remote.response.follower
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.dosopttemplate.domain.model.Follower
 
 @Serializable
 data class ResponseFollowerDto(
     @SerialName("page")
     val page: Int,
     @SerialName("per_page")
-    val per_page: Int,
+    val perPage: Int,
     @SerialName("total")
     val total: Int,
     @SerialName("total_pages")
-    val total_pages: Int,
+    val totalPages: Int,
     @SerialName("data")
     val followerData: List<FollowerData>,
     @SerialName("support")
@@ -27,9 +28,9 @@ data class ResponseFollowerDto(
         @SerialName("email")
         val email: String,
         @SerialName("first_name")
-        val first_name: String,
+        val firstName: String,
         @SerialName("last_name")
-        val last_name: String
+        val lastName: String
     )
 
     @Serializable
@@ -39,4 +40,14 @@ data class ResponseFollowerDto(
         @SerialName("url")
         val url: String
     )
+
+    fun toFollowerData(): List<Follower> = followerData.map {
+        Follower(
+            id = it.id,
+            avatar = it.avatar,
+            email = it.email,
+            firstName = it.firstName,
+            lastName = it.firstName,
+        )
+    }
 }

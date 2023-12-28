@@ -1,11 +1,14 @@
 package org.sopt.dosopttemplate.data.repository
 
-import org.sopt.dosopttemplate.data.model.remote.api.ServicePool
-import org.sopt.dosopttemplate.data.model.remote.response.follower.ResponseFollowerDto
+import org.sopt.dosopttemplate.data.datasource.remote.HomeDataSource
+import org.sopt.dosopttemplate.domain.model.Follower
+import org.sopt.dosopttemplate.domain.repository.HomeRepository
+import javax.inject.Inject
 
-class HomeRepositoryImpl {
-    suspend fun getFollowerList(pageNumber: Int): Result<List<ResponseFollowerDto.FollowerData>> =
-        runCatching {
-            ServicePool.followerService.getFollowerList(pageNumber).followerData
-        }
+class HomeRepositoryImpl @Inject constructor(
+    private val homeDataSource: HomeDataSource,
+) : HomeRepository {
+    override suspend fun getHomeFollower(page: Int): Result<List<Follower>> = runCatching {
+        homeDataSource.getHomeFollower(page).toFollowerData()
+    }
 }

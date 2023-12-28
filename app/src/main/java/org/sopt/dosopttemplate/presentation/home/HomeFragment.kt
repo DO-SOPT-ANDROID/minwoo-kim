@@ -5,15 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import org.sopt.dosopttemplate.data.model.local.HomeState
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.dosopttemplate.databinding.FragmentHomeBinding
-import org.sopt.dosopttemplate.presentation.common.ViewModelFactory
+import org.sopt.dosopttemplate.util.UiState
 import org.sopt.dosopttemplate.util.base.BindingFragment
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 
+@AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>() {
     private lateinit var followerAdapter: FollowerAdapter
-    private val viewModel: HomeViewModel by viewModels { ViewModelFactory() }
+    private val homeViewModel by viewModels<HomeViewModel>()
 
     override fun getFragmentBinding(
         inflater: LayoutInflater,
@@ -24,12 +29,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         super.onViewCreated(view, savedInstanceState)
 
         initAdapter()
-        getFollowerList()
-        observeHomeState()
-    }
-
-    private fun getFollowerList() {
-        viewModel.getFollowerList()
+        getFollower()
+        collectFollower()
     }
 
     private fun initAdapter() {
@@ -37,28 +38,35 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>() {
         binding.rvHome.adapter = followerAdapter
     }
 
-    private fun setFollowerList() {
-        viewModel.followerList.observe(viewLifecycleOwner) { followerList ->
-            followerAdapter.setFollowerList(followerList)
-        }
+    private fun getFollower() {
+        homeViewModel.getFollowerList(page)
     }
 
-    private fun observeHomeState() {
-        viewModel.homeState.observe(viewLifecycleOwner) { homeState ->
-            when (homeState) {
-                is HomeState.Success -> {
-                    setFollowerList()
+    private fun collectFollower() {
+        homeViewModel.uiState.flowWithLifecycle(lifecycle).onEach { state ->
+            when (state) {
+                is UiState.Success -> {
+                    followerAdapter.setFollowerList(state.data)
                     shortSnackBar(binding.root, "데이터 불러오기 성공")
                 }
 
-                is HomeState.Error -> {
-                    shortSnackBar(binding.root, "데이터 불러오기 실패")
+                is UiState.Failure -> {
+                    shortSnackBar(binding.root, "데이터 불러오기 실패, ${state.msg}")
                 }
 
-                is HomeState.Loading -> {
+                is UiState.Loading -> {
                     shortSnackBar(binding.root, "데이터 불러오는 중")
                 }
+
+                is UiState.Empty -> {
+                    shortSnackBar(binding.root, "데이터가 비어있습니다.")
+                    return@onEach
+                }
             }
-        }
+        }.launchIn(lifecycleScope)
+    }
+
+    companion object {
+        const val page = 2
     }
 }

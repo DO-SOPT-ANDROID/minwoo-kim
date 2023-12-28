@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.data.model.remote.api
+package org.sopt.dosopttemplate.di
 
 import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -8,9 +8,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.dosopttemplate.BuildConfig.AUTH_BASE_URL
-import org.sopt.dosopttemplate.BuildConfig.FOLLOWER_BASE_URL
 import org.sopt.dosopttemplate.data.service.AuthService
-import org.sopt.dosopttemplate.data.service.HomeService
 import retrofit2.Retrofit
 
 object ApiFactory {
@@ -26,18 +24,17 @@ object ApiFactory {
         .addInterceptor(getLogOkHttpClient())
         .build()
 
-    fun getRetrofit(url: String): Retrofit =
+    fun getRetrofit(): Retrofit =
         Retrofit.Builder()
-            .baseUrl(url)
+            .baseUrl(AUTH_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
 
-    inline fun <reified T, B> create(url: B): T =
-        getRetrofit(url.toString()).create(T::class.java)
+    inline fun <reified T> create(): T =
+        getRetrofit().create(T::class.java)
 }
 
 object ServicePool {
-    val authService = ApiFactory.create<AuthService, String>(AUTH_BASE_URL)
-    val followerService = ApiFactory.create<HomeService, String>(FOLLOWER_BASE_URL)
+    val authService = ApiFactory.create<AuthService>()
 }

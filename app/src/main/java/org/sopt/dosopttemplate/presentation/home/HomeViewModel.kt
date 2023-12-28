@@ -1,35 +1,31 @@
 package org.sopt.dosopttemplate.presentation.home
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.dosopttemplate.data.model.remote.response.follower.ResponseFollowerDto
-import org.sopt.dosopttemplate.data.repository.HomeRepositoryImpl
+import org.sopt.dosopttemplate.domain.model.Follower
+import org.sopt.dosopttemplate.domain.repository.HomeRepository
+import org.sopt.dosopttemplate.util.UiState
 import javax.inject.Inject
 
-class HomeViewModel(private val homeRepository: HomeRepositoryImpl) : ViewModel() {
-    private val _homeState = MutableLiveData<HomeState>()
-    val homeState = _homeState
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val homeRepository: HomeRepository,
+) : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState<List<Follower>>>(UiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
-    private val _followerList = MutableLiveData<List<ResponseFollowerDto.FollowerData>>()
-    val followerList = _followerList
-
-    fun getFollowerList() {
-        _homeState.value = HomeState.Loading
+    fun getFollowerList(page: Int) {
         viewModelScope.launch {
-            homeRepository.getFollowerList(pageNumber)
-                .onSuccess {
-                    _followerList.value = it
-                    _homeState.value = HomeState.Success
-                }.onFailure {
-                    _homeState.value = HomeState.Error
+            homeRepository.getHomeFollower(page)
+                .onSuccess { followerData ->
+                    _uiState.value = UiState.Success(followerData)
+                }.onFailure { throwable ->
+                    _uiState.value = UiState.Failure(throwable.message.toString())
                 }
         }
-    }
-
-    companion object {
-        const val pageNumber = 2
     }
 }

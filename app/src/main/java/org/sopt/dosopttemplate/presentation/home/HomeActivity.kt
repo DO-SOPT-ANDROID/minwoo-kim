@@ -3,6 +3,7 @@ package org.sopt.dosopttemplate.presentation.home
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.dosopttemplate.R
 import org.sopt.dosopttemplate.databinding.ActivityHomeBinding
 import org.sopt.dosopttemplate.presentation.friend.FriendFragment
@@ -11,6 +12,7 @@ import org.sopt.dosopttemplate.presentation.mypage.MyPageFragment
 import org.sopt.dosopttemplate.util.base.BindingActivity
 import org.sopt.dosopttemplate.util.context.shortSnackBar
 
+@AndroidEntryPoint
 class HomeActivity : BindingActivity<ActivityHomeBinding>({ ActivityHomeBinding.inflate(it) }) {
     private var backPressedTime: Long = 0
 
