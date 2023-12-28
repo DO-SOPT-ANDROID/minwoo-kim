@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.data.model.local.UserInfo
 import org.sopt.dosopttemplate.data.model.remote.api.ServicePool
-import org.sopt.dosopttemplate.data.model.remote.model.dto.request.auth.RequestSignupDto
+import org.sopt.dosopttemplate.data.model.remote.model.request.auth.RequestSignupDto
 import org.sopt.dosopttemplate.util.UiState
 import java.util.regex.Pattern
 

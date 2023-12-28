@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import org.sopt.dosopttemplate.data.model.local.HomeState
-import org.sopt.dosopttemplate.data.model.remote.model.dto.response.follower.ResponseFollowerDto
+import org.sopt.dosopttemplate.data.model.remote.model.response.follower.ResponseFollowerDto
 import org.sopt.dosopttemplate.data.repository.HomeRepositoryImpl
 
 class HomeViewModel(private val homeRepository: HomeRepositoryImpl) : ViewModel() {

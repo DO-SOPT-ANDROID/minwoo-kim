@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.dosopttemplate.data.model.remote.model.dto.response.follower.ResponseFollowerDto
+import org.sopt.dosopttemplate.data.model.remote.model.response.follower.ResponseFollowerDto
 import org.sopt.dosopttemplate.databinding.ItemFollowerBinding
 
 class FollowerAdapter(context: Context) :

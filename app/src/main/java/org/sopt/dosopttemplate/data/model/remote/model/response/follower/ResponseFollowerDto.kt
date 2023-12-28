@@ -1,4 +1,4 @@
-package org.sopt.dosopttemplate.data.model.remote.model.dto.response.follower
+package org.sopt.dosopttemplate.data.model.remote.model.response.follower
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

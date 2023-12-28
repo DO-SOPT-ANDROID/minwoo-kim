@@ -1,14 +1,14 @@
-package org.sopt.dosopttemplate.data.model.remote.model.dto.response.auth
+package org.sopt.dosopttemplate.data.model.remote.model.request.auth
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ResponseLoginDto(
-    @SerialName("id")
-    val id: Int,
+data class RequestSignupDto(
     @SerialName("username")
     val username: String,
+    @SerialName("password")
+    val password: String,
     @SerialName("nickname")
     val nickname: String,
 )
