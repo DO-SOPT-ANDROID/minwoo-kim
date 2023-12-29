@@ -7,13 +7,13 @@
 
         <variable
             name="loginViewModel"
-            type="org.sopt.dosopttemplate.ui.auth.LoginViewModel" />
+            type="org.sopt.dosopttemplate.presentation.auth.LoginViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.auth.LoginActivity">
+        tools:context=".presentation.auth.LoginActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_login"
