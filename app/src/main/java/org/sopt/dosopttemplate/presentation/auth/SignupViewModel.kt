@@ -26,7 +26,6 @@ class SignupViewModel : ViewModel() {
     val address: MutableLiveData<String> = MutableLiveData("")
 
     val isIdValid = id.map { ID_PATTERN.matcher(it).matches() }
-
     val isPwValid = pw.map { PW_PATTERN.matcher(it).matches() }
 
     fun signupBtnValidate() {
