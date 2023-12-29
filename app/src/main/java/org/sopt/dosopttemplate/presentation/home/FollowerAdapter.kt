@@ -30,8 +30,8 @@ class FollowerAdapter(context: Context) :
         holder.onBind(followerList[position])
     }
 
-    fun setFollowerList(follower: List<Follower>) {
-        followerList = follower
+    fun setFollowerList(followerList: List<Follower>) {
+        this.followerList = followerList
         notifyDataSetChanged()
     }
 }
