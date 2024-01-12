@@ -7,7 +7,7 @@
 
         <variable
             name="followerData"
-            type="org.sopt.dosopttemplate.data.remote.model.dto.response.follower.ResponseFollowerDto.FollowerData" />
+            type="org.sopt.dosopttemplate.domain.model.Follower" />
 
     </data>
 
@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@{followerData.first_name}"
+            android:text="@{followerData.firstName}"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
